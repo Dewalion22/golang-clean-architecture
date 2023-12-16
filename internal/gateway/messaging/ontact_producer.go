@@ -1,10 +1,9 @@
 package messaging
 
 import (
-	"main/internal/model"
-
-	"github.com/confluentinc/confluent-kafka-go/kafka"
+	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 	"github.com/sirupsen/logrus"
+	"golang-clean-architecture/internal/model"
 )
 
 type ContactProducer struct {

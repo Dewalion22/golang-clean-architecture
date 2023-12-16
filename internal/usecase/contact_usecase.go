@@ -2,17 +2,15 @@ package usecase
 
 import (
 	"context"
-	"main/internal/entity"
-	"main/internal/gateway/messaging"
-	"main/internal/model"
-	"main/internal/model/converter"
-	"main/internal/repository"
-
 	"github.com/go-playground/validator/v10"
-	"github.com/gofiber/fiber"
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
+	"golang-clean-architecture/internal/entity"
+	"golang-clean-architecture/internal/gateway/messaging"
+	"golang-clean-architecture/internal/model"
+	"golang-clean-architecture/internal/model/converter"
+	"golang-clean-architecture/internal/repository"
 	"gorm.io/gorm"
 )
 

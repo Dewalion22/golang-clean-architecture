@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 	"github.com/sirupsen/logrus"
-	"main/internal/model"
+	"golang-clean-architecture/internal/model"
 )
 
 type AddressConsumer struct {

@@ -1,11 +1,11 @@
 package model
 
-type WebResponse[T Any] struct {
+type WebResponse[T any] struct {
 	Data   T             `json:"data"`
 	Paging *PageMetadata `json:"paging,omitempty"`
 	Errors string        `json:"errors,omitempty"`
 }
-type PageResponse[T Any] struct {
+type PageResponse[T any] struct {
 	Data         []T          `json:"data,omitempty"`
 	PageMetadata PageMetadata `json:"paging,omitempty"`
 }

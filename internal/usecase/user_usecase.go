@@ -2,18 +2,15 @@ package usecase
 
 import (
 	"context"
-	"main/internal/converter"
-	"main/internal/entity"
-	"main/internal/gateway/messaging"
-	"main/internal/model"
-	"main/internal/model/converter"
-	"main/internal/repository"
-	"os/user"
-
-	"github.com/go-playground/validator"
 	"github.com/go-playground/validator/v10"
-	"github.com/gofiber/fiber"
+	"github.com/gofiber/fiber/v2"
+	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
+	"golang-clean-architecture/internal/entity"
+	"golang-clean-architecture/internal/gateway/messaging"
+	"golang-clean-architecture/internal/model"
+	"golang-clean-architecture/internal/model/converter"
+	"golang-clean-architecture/internal/repository"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
@@ -169,8 +166,8 @@ func (c *UserUseCase) Current(ctx context.Context, request *model.GetUserRequest
 	return converter.UserToResponse(user), nil
 }
 
-func (c *UserUseCase) Logout(ctx context.Context, request *model.LogoutUserRequest) (*model.UserResponse, error) {
-	tx := c.DB.WithCotext(ctx).Begin()
+func (c *UserUseCase) Logout(ctx context.Context, request *model.LogoutUserRequest) (bool, error) {
+	tx := c.DB.WithContext(ctx).Begin()
 	defer tx.Rollback()
 
 	if err := c.Validate.Struct(request); err != nil {
@@ -250,4 +247,3 @@ func (c *UserUseCase) Update(ctx context.Context, request *model.UpdateUserReque
 
 	return converter.UserToResponse(user), nil
 }
-

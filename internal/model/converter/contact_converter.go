@@ -1,8 +1,8 @@
 package converter
 
 import (
-	"main/internal/entity"
-	"main/internal/model"
+	"golang-clean-architecture/internal/entity"
+	"golang-clean-architecture/internal/model"
 )
 
 func ContactToResponse(contact *entity.Contact) *model.ContactResponse {
@@ -22,7 +22,7 @@ func ContactToEvent(contact *entity.Contact) *model.ContactEvent {
 		ID:        contact.ID,
 		UserID:    contact.UserId,
 		FirstName: contact.FirstName,
-		Lastname:  contact.LastName,
+		LastName:  contact.LastName,
 		Email:     contact.Email,
 		Phone:     contact.Phone,
 		CreatedAt: contact.CreatedAt,

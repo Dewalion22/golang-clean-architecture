@@ -2,14 +2,15 @@ package usecase
 
 import (
 	"context"
-	"main/internal/entity"
-	"main/internal/gateway/messaging"
-	"main/internal/model"
-	"main/internal/model/converter"
-	"main/internal/repository"
+	"github.com/gofiber/fiber/v2"
+	"github.com/google/uuid"
+	"golang-clean-architecture/internal/entity"
+	"golang-clean-architecture/internal/gateway/messaging"
+	"golang-clean-architecture/internal/model"
+	"golang-clean-architecture/internal/model/converter"
+	"golang-clean-architecture/internal/repository"
 
 	"github.com/go-playground/validator/v10"
-	"github.com/gofiber/fiber"
 	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )
@@ -70,7 +71,7 @@ func (c *AddressUseCase) Create(ctx context.Context, request *model.CreateAddres
 
 	event := converter.AddressToEvent(address)
 	if err := c.AddressProducer.Send(event); err != nil {
-		c.Log.WithError(err).Error("failed to publish addres event")
+		c.Log.WithError(err).Error("failed to publish address event")
 		return nil, fiber.ErrInternalServerError
 	}
 	return converter.AddressToResponse(address), nil
@@ -91,8 +92,8 @@ func (c *AddressUseCase) Update(ctx context.Context, request *model.UpdateAddres
 	}
 
 	address := new(entity.Address)
-	if err := c.AddressRepository.Log.ReportCaller.FindByIdAndContactId(tx, address, request.ID, contact.ID); err != nil {
-		c.Log.WithError(err).Error("failed to find addres")
+	if err := c.AddressRepository.FindByIdAndContactId(tx, address, request.ID, contact.ID); err != nil {
+		c.Log.WithError(err).Error("failed to find address")
 	}
 
 	address.Street = request.Street
@@ -113,7 +114,7 @@ func (c *AddressUseCase) Update(ctx context.Context, request *model.UpdateAddres
 
 	event := converter.AddressToEvent(address)
 	if err := c.AddressProducer.Send(event); err != nil {
-		c.Log.WithError(err).Error("failed to publish addres event")
+		c.Log.WithError(err).Error("failed to publish address event")
 		return nil, fiber.ErrInternalServerError
 	}
 	return converter.AddressToResponse(address), nil
@@ -145,7 +146,7 @@ func (c *AddressUseCase) Get(ctx context.Context, request *model.GetAddressReque
 
 func (c *AddressUseCase) Delete(ctx context.Context, request *model.DeleteAddressRequest) error {
 	tx := c.DB.WithContext(ctx).Begin()
-	defer tx.RollBack()
+	defer tx.Rollback()
 
 	contact := new(entity.Contact)
 	if err := c.ContactRepository.FindByIdAndUserId(tx, contact, request.ContactId, request.UserId); err != nil {

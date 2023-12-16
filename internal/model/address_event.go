@@ -1,7 +1,7 @@
 package model
 
 type AddressEvent struct {
-	ID         string `json:"i"`
+	ID         string `json:"id"`
 	ContactId  string `json:"contact_id"`
 	Street     string `json:"street"`
 	City       string `json:"city"`

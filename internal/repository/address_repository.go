@@ -2,8 +2,8 @@ package repository
 
 import (
 	"github.com/sirupsen/logrus"
+	"golang-clean-architecture/internal/entity"
 	"gorm.io/gorm"
-	"main/internal/entity"
 )
 
 type AddressRepository struct {

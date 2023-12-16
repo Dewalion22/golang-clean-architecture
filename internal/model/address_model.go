@@ -10,6 +10,10 @@ type AddressResponse struct {
 	CreatedAt  int64  `json:"created_at"`
 	UpdatedAt  int64  `json:"updated_at"`
 }
+type ListAddressRequest struct {
+	UserId    string `json:"-" validate:"required"`
+	ContactId string `json:"-" validate:"required,max=100,uuid"`
+}
 
 type CreateAddressRequest struct {
 	UserId     string `json:"-" validate:"required"`

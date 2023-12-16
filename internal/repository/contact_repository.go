@@ -1,9 +1,8 @@
 package repository
 
 import (
-	"log"
-	"main/internal/entity"
-	"main/internal/model"
+	"golang-clean-architecture/internal/entity"
+	"golang-clean-architecture/internal/model"
 
 	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
@@ -25,15 +24,16 @@ func (r *ContactRepository) FindByIdAndUserId(db *gorm.DB, contact *entity.Conta
 
 func (r *ContactRepository) Search(db *gorm.DB, request *model.SearchContactRequest) ([]entity.Contact, int64, error) {
 	var contacts []entity.Contact
-	if err := db.scopes(r.FilterContact(request)).Offset((request.Page - 1) * request.Size).Limit(request.Size).Find(&contacts).Error; err != nil {
+	var total int64 = 0
+	if err := db.Scopes(r.FilterContact(request)).Offset((request.Page - 1) * request.Size).Limit(request.Size).Find(&contacts).Error; err != nil {
 		return nil, 0, err
 	}
 	return contacts, total, nil
 }
 
-func (r *ContactRepository) FilterContact(reuqest *model.SearchContactRequest) func(tx *gorm.DB) *gorm.DB {
+func (r *ContactRepository) FilterContact(request *model.SearchContactRequest) func(tx *gorm.DB) *gorm.DB {
 	return func(tx *gorm.DB) *gorm.DB {
-		tx = tx.Where("user_id = ?", reuqest.UserId)
+		tx = tx.Where("user_id = ?", request.UserId)
 
 		if name := request.Name; name != "" {
 			name = "%" + name + "%"
@@ -45,7 +45,7 @@ func (r *ContactRepository) FilterContact(reuqest *model.SearchContactRequest) f
 			tx = tx.Where("phone LIKE ?", phone)
 		}
 
-		if email := reuqest.Email; email != "" {
+		if email := request.Email; email != "" {
 			email = "%" + email + "%"
 			tx = tx.Where("email LIKE ?", email)
 		}
