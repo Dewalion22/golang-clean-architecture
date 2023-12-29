@@ -24,10 +24,15 @@ func (r *ContactRepository) FindByIdAndUserId(db *gorm.DB, contact *entity.Conta
 
 func (r *ContactRepository) Search(db *gorm.DB, request *model.SearchContactRequest) ([]entity.Contact, int64, error) {
 	var contacts []entity.Contact
-	var total int64 = 0
+
 	if err := db.Scopes(r.FilterContact(request)).Offset((request.Page - 1) * request.Size).Limit(request.Size).Find(&contacts).Error; err != nil {
 		return nil, 0, err
 	}
+	var total int64 = 0
+	if err := db.Model(&entity.Contact{}).Scopes(r.FilterContact(request)).Count(&total).Error; err != nil {
+		return nil, 0, err
+	}
+
 	return contacts, total, nil
 }
 
