@@ -15,8 +15,8 @@ type UserController struct {
 
 func NewUserController(logger *logrus.Logger, useCase *usecase.UserUseCase) *UserController {
 	return &UserController{
-		Log:     logger,
 		UseCase: useCase,
+		Log:     logger,
 	}
 }
 

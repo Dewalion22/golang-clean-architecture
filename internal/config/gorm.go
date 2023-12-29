@@ -10,11 +10,11 @@ import (
 	"time"
 )
 
-func NewDatabase(viper *viper.Viper, log *logrus.logger) *gorm.DB {
+func NewDatabase(viper *viper.Viper, log *logrus.Logger) *gorm.DB {
 	username := viper.GetString("database.username")
 	password := viper.GetString("database.password")
 	host := viper.GetString("database.host")
-	port := viper.GetString("database.port")
+	port := viper.GetInt("database.port")
 	database := viper.GetString("database.name")
 	idleConnection := viper.GetInt("database.pool.idle")
 	maxConnection := viper.GetInt("database.pool.max")

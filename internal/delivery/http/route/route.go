@@ -32,6 +32,7 @@ func (c *RouteConfig) SetupAuthRoute() {
 	c.App.Get("/api/contacts", c.ContactController.List)
 	c.App.Post("/api/contacts", c.ContactController.Create)
 	c.App.Put("/api/contacts/:contactId", c.ContactController.Update)
+	c.App.Get("/api/contacts/:contactId", c.ContactController.Get)
 	c.App.Delete("/api/contacts/:contactId", c.ContactController.Delete)
 
 	c.App.Get("/api/contacts/:contactId/addresses", c.AddressController.List)

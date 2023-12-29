@@ -1,13 +1,12 @@
 package config
 
 import (
-	"github.com/confluentinc/confluent-kafka-go/kafka"
 	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 )
 
-func NewKafkaConsumer(config *viper.Viper, log *logrus.Logger) (*kafka.Consumer, error) {
+func NewKafkaConsumer(config *viper.Viper, log *logrus.Logger) *kafka.Consumer {
 	kafkaConfig := &kafka.ConfigMap{
 		"bootstrap.servers": config.GetString("kafka.bootstrap.servers"),
 		"group.id":          config.GetString("kafka.group.id"),
@@ -22,7 +21,7 @@ func NewKafkaConsumer(config *viper.Viper, log *logrus.Logger) (*kafka.Consumer,
 
 func NewKafkaProducer(config *viper.Viper, log *logrus.Logger) *kafka.Producer {
 	kafkaConfig := &kafka.ConfigMap{
-		"bootstraps.servers": config.GetString("kafka.bootstrap.servers"),
+		"bootstrap.servers": config.GetString("kafka.bootstrap.servers"),
 	}
 
 	producer, err := kafka.NewProducer(kafkaConfig)

@@ -39,13 +39,13 @@ func (c *UserUseCase) Verify(ctx context.Context, request *model.VerifyUserReque
 
 	err := c.Validate.Struct(request)
 	if err != nil {
-		c.Log.Warnf("Invalide request: %v", err)
+		c.Log.Warnf("Invalide request body : %+v", err)
 		return nil, fiber.ErrBadRequest
 	}
 
 	user := new(entity.User)
 	if err := c.UserRepository.FindByToken(tx, user, request.Token); err != nil {
-		c.Log.Warnf("Failder find user by to: %v", err)
+		c.Log.Warnf("Failed find user by token : %+v", err)
 		return nil, fiber.ErrNotFound
 	}
 
@@ -62,7 +62,7 @@ func (c *UserUseCase) Create(ctx context.Context, request *model.RegisterUserReq
 
 	err := c.Validate.Struct(request)
 	if err != nil {
-		c.Log.Warnf("Invalide request: %v", err)
+		c.Log.Warnf("Invalide request body: %+v", err)
 		return nil, fiber.ErrBadRequest
 	}
 
@@ -79,7 +79,7 @@ func (c *UserUseCase) Create(ctx context.Context, request *model.RegisterUserReq
 
 	password, err := bcrypt.GenerateFromPassword([]byte(request.Password), bcrypt.DefaultCost)
 	if err != nil {
-		c.Log.Warnf("Failed to generate bcrype hash : %v", err)
+		c.Log.Warnf("Failed to generate bcrype hash : %+v", err)
 		return nil, fiber.ErrInternalServerError
 	}
 
@@ -88,8 +88,14 @@ func (c *UserUseCase) Create(ctx context.Context, request *model.RegisterUserReq
 		Password: string(password),
 		Name:     request.Name,
 	}
+
 	if err := c.UserRepository.Create(tx, user); err != nil {
-		c.Log.Warnf("Failed create user to database: %v", err)
+		c.Log.Warnf("Failed create user to database: %+v", err)
+		return nil, fiber.ErrInternalServerError
+	}
+
+	if err := tx.Commit().Error; err != nil {
+		c.Log.Warnf("Failed commit transaction : %+v ", err)
 		return nil, fiber.ErrInternalServerError
 	}
 
@@ -99,7 +105,7 @@ func (c *UserUseCase) Create(ctx context.Context, request *model.RegisterUserReq
 		c.Log.Warnf("Failed to publish user Created event: %v", err)
 		return nil, fiber.ErrInternalServerError
 	}
-	return converter.UserToTokenResponse(user), nil
+	return converter.UserToResponse(user), nil
 
 }
 

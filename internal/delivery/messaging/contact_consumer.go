@@ -11,7 +11,7 @@ type ContactConsumer struct {
 	Log *logrus.Logger
 }
 
-func NewConctactConsumer(log *logrus.Logger) *ContactConsumer {
+func NewContactConsumer(log *logrus.Logger) *ContactConsumer {
 	return &ContactConsumer{
 		Log: log,
 	}
